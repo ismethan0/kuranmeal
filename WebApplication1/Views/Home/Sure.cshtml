@@ -1,0 +1,69 @@
+﻿@using Microsoft.EntityFrameworkCore
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model AyetModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    KuranContext kuran = new KuranContext();
+    var sureler = await (from sure in kuran.SureTables select sure).ToListAsync();
+    var diyanetyeni = await (from ayet in kuran.DiyanetYenis where ayet.SureId == Model.SureId select ayet).ToListAsync();
+}
+<div class="container-fluid p-1 bg-primary text-light text-center pt-1 ">
+    <ul class="list-group list-group-horizontal ">
+       
+        <li class="list-group-item mx-auto border border-0 bg-primary ">
+            <form asp-controller="Home" asp-action="OncekiSure" method="post">
+                <input type="hidden" name="sure" value="@Model.SureId" />
+                <input type="hidden" name="ayet" value="@Model.AyetId" />
+                <button type="submit" class="btn btn-link" style="text-decoration: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
+                    </svg>
+                    Önceki Sure
+                </button>
+            </form>
+
+        </li>
+        <h3 class="mx-auto mt-3">@sureler[Model.SureId - 1].Sureler.Split("/")[0] </h3>
+        <li class="list-group-item mx-auto border border-0 bg-primary">
+            <form asp-controller="Home" asp-action="SonrakiSure" method="post">
+                <input type="hidden" name="sure" value="@Model.SureId" />
+                <input type="hidden" name="ayet" value="@Model.AyetId" />
+                <button type="submit" class="btn btn-link" style="text-decoration: none;">
+                    Sonraki Sure
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
+                    </svg>
+                </button>
+            </form>
+
+
+
+        </li>
+    </ul>
+</div>
+<div class="container text-center sidebar">
+    <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 text-light mt-2 content-wrapper">
+
+        <div class="col col-xxl">
+            <div class="p-3">
+                <ul class="list-group">
+                    
+                    @for (int i = 0; i < sureler[Model.SureId-1].AyetSayisi; i++)
+                    { 
+
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <p class="text-start ms-1">@diyanetyeni[i].AyetId</p>
+                            <p class="ms-4" id="arapcaayet">@diyanetyeni[i].Ayet</p>
+                        </li>
+                           
+                        
+                    } 
+        
+                </ul>
+            </div>
+        </div>
+    </div>
+   
+
+
+</div>

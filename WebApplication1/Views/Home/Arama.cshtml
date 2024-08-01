@@ -1,63 +1,75 @@
-﻿
+﻿@using Microsoft.EntityFrameworkCore
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 @{
-    ViewData["Title"] = "Arama";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    KuranContext kuran = new KuranContext();
+    var sureler = await (from sure in kuran.SureTables select sure).ToListAsync();
 }
 
 <div class="container">
     <h1 class="text-center text-light mt-5">Gelişmiş arama</h1>
-    <form class="mt-5 text-light">
+    <form class="mt-5 text-light" asp-controller="SearchControlller" asp-action="Search" method="post">
         <fieldset>
-            <label for="exampleSelect1" class="form-label mt-4">Lütfen aramak istediğiniz kelimeyi yazınız</label>
-            <input class="form-control me-sm-2" type="search" placeholder="">
+            <label for="keyword" class="form-label mt-4">Lütfen aramak istediğiniz kelimeyi yazınız</label>
+            <input class="form-control me-sm-2" type="search" placeholder="" name="keyword">
             <div>
-                <label for="exampleSelect1" class="form-label mt-4">Kelimeyi aradığınız meal</label>
-                <select class="form-select" id="exampleSelect1">
-                    <option>Abdulbaki Gölpınarlı Meali</option>
-                    <option>Besim Atalay Meali</option>
-                    <option>Cemal Külünkoğlu Meali</option>
-                    <option>Kur'an Yolu (Diyanet İşleri)</option>
-                    <option>Hasan Basri Çantay Meali</option>
+                <label for="meal" class="form-label mt-4">Kelimeyi aradığınız meal</label>
+                <select class="form-select" name="meal" id="meal">
+                    <option>Arapça Metin</option>
+                    <option>Diyanet(Yeni)</option>
+                    <option>Diyanet(Eski)</option>
+                    <option>Elmalılı Muhammed Hamdi Yazır (Yenilenmiş)</option>
+                    <option>Elmalılı Muhammed Hamdi Yazır (Orjinal)</option>
+                    <option>Suleymaniye Vakfı</option>
+                    <option>Yaşar Nuri Öztürk</option>
+                    <option>Edip Yüksel</option>
+                    <option>Muhammed Esed</option>
+                    <option>Yusuf Ali(ingilizce)</option>
+                    <option>Anadolu Türkçesi</option>
+                    <option>Anonim</option>
+                    <option>Azeri Türkçesi</option>
                 </select>
             </div>
             <div>
-                <label for="exampleSelect1" class="form-label mt-4">Kelimeyi aradığınız Sure</label>
-                <select class="form-select" id="exampleSelect1">
+                <label for="sure" class="form-label mt-4">Kelimeyi aradığınız Sure</label>
+                <select class="form-select" id="sure" name="sure">
                     <option>Tüm Surelerde ara</option>
-                    <option>Abese</option>
-                    <option>Adiyat</option>
-                    <option>Ahkaf</option>
-                    <option>Ahzap</option>
+                    @for (int i = 0; i < 114; i++)
+                    {
+                        <option value="@sureler[i].SureId">@sureler[i].Sureler.Split("/")[0]</option>
+                    }
                 </select>
             </div>
             <fieldset>
                 <div class="form-check mt-5">
-                    <input class="form-check-input" type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-                    <label class="form-check-label" for="optionsRadios1">
-                        Kelimelerin hepsi bulunsun (Birden fazla kelime aradığınızda kelimelerden her birinin birlikte  geçtiği ayetleri listelemek için bu seçeneği seçiniz)
+                    <input class="form-check-input" type="radio" name="SearchOption" id="allWords" value="AllWords" checked>
+                    <label class="form-check-label" for="allWords">
+                        Kelimelerin hepsi bulunsun (Birden fazla kelime aradığınızda kelimelerden her birinin birlikte geçtiği ayetleri listelemek için bu seçeneği seçiniz)
                     </label>
                 </div>
                 <div class="form-check mt-2">
-                    <input class="form-check-input" type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
-                    <label class="form-check-label" for="optionsRadios1">
-                        Kelimelerden herhangi biri bulunsun (Birden fazla kelime aradığınızda kelimelerden her birinin birlikte yada ayrı ayrı geçtiği ayetleri listelemek için bu seçeneği seçiniz)
+                    <input class="form-check-input" type="radio" name="SearchOption" id="anyWord" value="AnyWord">
+                    <label class="form-check-label" for="anyWord">
+                        Kelimelerden herhangi biri bulunsun (Birden fazla kelime aradığınızda kelimelerden her birinin birlikte ya da ayrı ayrı geçtiği ayetleri listelemek için bu seçeneği seçiniz)
                     </label>
                 </div>
                 <div class="form-check mt-2">
-                    <input class="form-check-input" type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
-                    <label class="form-check-label" for="optionsRadios1">
-                        Aynen yazıldığı gibi bulunsun (Bir yada birden fazla kelime aradığınızda kelimeleri aynen yazdığınız şekilde (boşluk, tırnak vs. dahil) geçen ayetleri listelemek için bu seçeneği seçiniz)
+                    <input class="form-check-input" type="radio" name="SearchOption" id="exactMatch" value="ExactMatch">
+                    <label class="form-check-label" for="exactMatch">
+                        Aynen yazıldığı gibi bulunsun (Bir ya da birden fazla kelime aradığınızda kelimeleri aynen yazdığınız şekilde (boşluk, tırnak vs. dahil) geçen ayetleri listelemek için bu seçeneği seçiniz)
                     </label>
                 </div>
                 <div class="form-check mt-5">
-                    <input class="form-check-input" type="checkbox" name="flexCheckDefault" id="flexCheckDefault" value="">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Sonuçlar Nüzul sırasıyla gösterilsin (Aramanızın sıralamasını Nüzul sırasına göre yapılmasını isterseniz işaretleyin. işaretlemediğiniz takdirde Kur'an sırasına göre listelenecektir.)
+                    <input class="form-check-input" type="checkbox" name="OrderByRevelation" id="orderByRevelation" value="true">
+                    <label class="form-check-label" for="orderByRevelation">
+                        Sonuçlar Nüzul sırasıyla gösterilsin (Aramanızın sıralamasını Nüzul sırasına göre yapılmasını isterseniz işaretleyin. İşaretlemediğiniz takdirde Kur'an sırasına göre listelenecektir.)
                     </label>
                 </div>
                 <div class="d-grid gap-2 col-6 mx-auto">
-                    <button class="btn btn-outline-primary text-primary bg-light mt-5" type="button">Ara</button>
+                    <button class="btn btn-outline-primary text-primary bg-light mt-5" type="submit">Ara</button>
                 </div>
+
             </fieldset>
         </fieldset>
     </form>

@@ -1,0 +1,334 @@
+﻿@using Microsoft.EntityFrameworkCore
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model AyetModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    KuranContext kuran = new KuranContext();
+    var sureler = await (from sure in kuran.SureTables select sure).ToListAsync();
+    var arapca = await (from ayet in kuran.Arapcas where ayet.SureId == Model.SureId & ayet.AyetId == Model.AyetId select ayet).ToListAsync();
+    var diyanetyeni = await (from ayet in kuran.DiyanetYenis where ayet.SureId == Model.SureId & ayet.AyetId == Model.AyetId select ayet).ToListAsync();
+    var diyaneteski = await (from ayet in kuran.DiyanetEskis where ayet.SureId == Model.SureId & ayet.AyetId == Model.AyetId select ayet).ToListAsync();
+    var elmalı = await (from ayet in kuran.ElmaliHamdis where ayet.SureId == Model.SureId & ayet.AyetId == Model.AyetId select ayet).ToListAsync();
+    var elmalıorg = await (from ayet in kuran.ElmaliHamdiOrginals where ayet.SureId == Model.SureId & ayet.AyetId == Model.AyetId select ayet).ToListAsync();
+    var suleymaniye = await (from ayet in kuran.Suleymaniyes where ayet.SureId == Model.SureId & ayet.AyetId == Model.AyetId select ayet).ToListAsync();
+    var yasar = await (from ayet in kuran.YasarNuriInısAyetlers where ayet.SureId == Model.SureId & ayet.AyetId == Model.AyetId select ayet).ToListAsync();
+    var edip = await (from ayet in kuran.Edipyuksels where ayet.SureId == Model.SureId & ayet.AyetId == Model.AyetId select ayet).ToListAsync();
+    var muhammed = await (from ayet in kuran.Eseds where ayet.SureId == Model.SureId & ayet.AyetId == Model.AyetId select ayet).ToListAsync();
+    var yusuf = await (from ayet in kuran.Yusufalis where ayet.SureId == Model.SureId & ayet.AyetId == Model.AyetId select ayet).ToListAsync();
+    var anadolu = await (from ayet in kuran.AnadoluTurkcesis where ayet.SureId == Model.SureId & ayet.AyetId == Model.AyetId select ayet).ToListAsync();
+    var anonim = await (from ayet in kuran.Anonims where ayet.SureId == Model.SureId & ayet.AyetId == Model.AyetId select ayet).ToListAsync();
+    var azeri = await (from ayet in kuran.AzeriTurkcesis where ayet.SureId == Model.SureId & ayet.AyetId == Model.AyetId select ayet).ToListAsync();
+}
+<style>
+    #sureler {
+    height: 400px; 
+    overflow-y: auto;
+    }
+
+    #ayetler {
+        height: 175px;
+        overflow-y: auto;
+        min-width: 3rem;
+    }
+
+    li.children {
+        display: none;
+    }
+</style>
+
+<div class="container-fluid p-1 bg-primary text-light text-center pt-1 ">
+    <ul class="list-group list-group-horizontal ">
+        <div class="dropdown mx-0">
+            <button class="btn text-light dropdown-toggle btn-sm mt-1 border border-0 bg-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">@sureler[(Model.SureId) - 1].Sureler.Split("/")[0]</button>
+            <ul class="dropdown-menu scrollable-menu" id="sureler" role="menu">
+                @for (int i = 0; i < 114; i++)
+                {
+                    <li>
+                        <form asp-action="SureGit" method="post" style="display:inline;">
+                            <input type="hidden" name="sure" value="@i" />
+                            <button type="submit" class="dropdown-item text-light btn btn-link" style="padding: 0; border: none; background: none;">@sureler[i].Sureler.Split("/")[0]</button>
+                        </form>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="dropdown mx-0">
+            <button class="btn text-light dropdown-toggle btn-sm mt-1 border border-0 bg-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">@Model.AyetId</button>
+            <ul class="dropdown-menu scrollable-menu" id="ayetler" role="menu">
+                @for (int i = 1; i < sureler[Model.SureId-1].AyetSayisi + 1; i++)
+                {
+                    <li>
+                        <form asp-action="AyetGit" method="post" style="display:inline;">
+                            <input type="hidden" name="sure" value="@Model.SureId" />
+                            <input type="hidden" name="ayet" value="@i" />
+                            <button type="submit" class="dropdown-item text-light btn btn-link" style="padding: 0; border: none; background: none;">@i</button>
+                        </form>
+                    </li>
+                }
+            </ul>
+        </div>
+        <li class="list-group-item mx-auto border border-0 bg-primary ">
+            <form asp-action="PreviousAyet" method="post">
+                <input type="hidden" name="SureId" value="@Model.SureId" />
+                <input type="hidden" name="AyetId" value="@Model.AyetId" />
+                <button type="submit" class="btn btn-link" style="text-decoration: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
+                    </svg>
+                    Önceki
+                </button>
+            </form>
+            
+        </li>
+        <h3 class="mx-auto mt-3">@sureler[Model.SureId-1].Sureler.Split("/")[0] @Model.AyetId Ayet</h3>
+        <li class="list-group-item mx-auto border border-0 bg-primary">
+            <form asp-action="NextAyet" method="post">
+                <input type="hidden" name="SureId" value="@Model.SureId" />
+                <input type="hidden" name="AyetId" value="@Model.AyetId" />
+                <button type="submit" class="btn btn-link" style="text-decoration: none;">
+                    İleri
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
+                    </svg>
+                </button>
+            </form>
+
+
+            
+        </li>
+    </ul>
+</div>
+<div class="container text-center sidebar">
+    <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 text-light mt-2 content-wrapper">
+        <div class="col">
+            <div class="p-3">
+                <form action="">
+                    <fieldset class="border border-4 border-opacity-25 rounded border-light">
+                        <legend class="my-1">Meal Ekle/Çıkar</legend>
+                        <div class="form-check my-1 mx-1 mb-4 border-bottom border-top">
+                            <input class="form-check-input" type="checkbox" value="" id="checkAll" onclick="handleCheckAll" checked="">
+                            <label class="form-check-label" for="checkAll">
+                                Hepsini Göster/Gizle
+                            </label>
+                        </div>
+                        <div class="form-check mt-1 mb-2 mx-1">
+                            <input class="form-check-input" type="checkbox" id="checkbox1" onclick="myFunction('target1')" checked="">
+                            <label class="form-check-label">
+                                Arapça Metin
+                            </label>
+                        </div>
+                        <div class="form-check mt-1 mb-2 mx-1">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox2" checked="" onclick="myFunction('target2')">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Diyanet(Yeni)
+                            </label>
+                        </div>
+                        <div class="form-check mt-1 mb-2 mx-1">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox3" checked="" onclick="myFunction('target3')">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Diyanet(Eski)
+                            </label>
+                        </div>
+                        <div class="form-check mt-1 mb-2 mx-1">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox4" checked="" onclick="myFunction('target4')">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Elmalılı Muhammed Hamdi Yazır (Yenilenmiş)
+                            </label>
+                        </div>
+                        <div class="form-check mt-1 mb-2 mx-1">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox5" checked="" onclick="myFunction('target5')">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Elmalılı Muhammed Hamdi Yazır (Orjinal metin)
+                            </label>
+                        </div>
+                        <div class="form-check mt-1 mb-2 mx-1">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox6" checked="" onclick="myFunction('target6')">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Suleymaniye Vakfı
+                            </label>
+                        </div>
+                        <div class="form-check mt-1 mb-2 mx-1">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox7" checked="" onclick="myFunction('target7')">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Yaşar Nuri Öztürk
+                            </label>
+                        </div>
+                        <div class="form-check mt-1 mb-2 mx-1">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox8" checked="" onclick="myFunction('target8')">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Edip Yüksel
+                            </label>
+                        </div>
+                        <div class="form-check mt-1 mb-2 mx-1">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox9" checked="" onclick="myFunction('target9')">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Muhammed Esed
+                            </label>
+                        </div>
+                        <div class="form-check mt-1 mb-2 mx-1">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox10" checked="" onclick="myFunction('target10')">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Yusuf Ali(ingilizce)
+                            </label>
+                        </div>
+                        <div class="form-check mt-1 mb-2 mx-1">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox11" checked="" onclick="myFunction('target11')">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Anadolu Türkçesi
+                            </label>
+                        </div>
+                        <div class="form-check mt-1 mb-2 mx-1">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox12" checked="" onclick="myFunction('target12')">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Anonim
+                            </label>
+                        </div>
+                        <div class="form-check mt-1 mb-2 mx-1">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox13" checked="" onclick="myFunction('target13')">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Azeri Türkçesi
+                            </label>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="col col-xxl">
+            <div class="p-3">
+                <ul class="list-group">
+
+                    <li class="list-group-item d-flex align-items-center justify-content-between" id="target1">
+                        <p class="text-start ms-1" style="text-decoration:none;" >Arapça Metin</p>
+                        <p class="ms-4" >@arapca[0].Ayet</p>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between" id="target2">
+                        <p class="text-start ms-1">Diyanet(Yeni))</p>
+                        <p class="ms-4">@diyanetyeni[0].Ayet</p>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between" id="target3">
+                        <p class="text-start ms-1">Diyanet(Eski)</p>
+                        <p class="ms-4">@diyaneteski[0].Ayet</p>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between" id="target4">
+                        <p class="text-start ms-1">Elmalılı Muhammed Hamdi Yazır (Yenilenmiş)</p>
+                        <p class="ms-4">@elmalı[0].Ayet</p>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between" id="target5">
+                        <p class="text-start ms-1">Elmalılı Muhammed Hamdi Yazır (Orjinal)</p>
+                        <p class="ms-4">@elmalıorg[0].Ayet</p>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between" id="target6">
+                        <p class="text-start ms-1">Suleymaniye Vakfı</p>
+                        <p class="ms-4">@suleymaniye[0].Ayet</p>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between" id="target7">
+                        <p class="text-start ms-1">Yaşar Nuri Öztürk</p>
+                        <p class="ms-4">@yasar[0].Ayet</p>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between" id="target8">
+                        <p class="text-start ms-1">Edip Yüksel</p>
+                        <p class="ms-4">@edip[0].Ayet</p>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between" id="target9">
+                        <p class="text-start ms-1">Muhammed Esed</p>
+                        <p class="ms-4">@muhammed[0].Ayet</p>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between" id="target10">
+                        <p class="text-start ms-1">Yusuf Ali(ingilizce)</p>
+                        <p class="ms-4">@yusuf[0].Ayet</p>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between" id="target11">
+                        <p class="text-start ms-1">Anadolu Türkçesi</p>
+                        <p class="ms-4">@anadolu[0].Ayet.</p>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between" id="target12">
+                        <p class="text-start ms-1">Anonim</p>
+                        <p class="ms-4">@anonim[0].Ayet</p>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center justify-content-between" id="target13">
+                        <p class="text-start ms-1">Azeri Türkçesi</p>
+                        <p class="ms-4">@azeri[0].Ayet</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // document.getElementById("arapca").children[0].style.display = "none"
+    // document.getElementById("arapca").children[1].style.display = "none"
+    // document.getElementById("arapca").style.visibility="hidden";
+    function myFunction(targetId) {
+        var checkboxId = 'checkbox' + targetId.substring(6); // Adjusted for your specific IDs
+
+        var checkbox = document.getElementById(checkboxId);
+        var targetElement = document.getElementById(targetId);
+
+        if (checkbox && checkbox.checked) {
+            targetElement.children[0].style.display = "";
+            targetElement.children[1].style.display = "";
+            targetElement.style.visibility = "visible";
+        } else {
+            targetElement.children[0].style.display = "none";
+            targetElement.children[1].style.display = "none";
+            targetElement.style.visibility = "hidden";
+        }
+    }
+
+    function createAndCallFunctions() {
+        for (let i = 1; i < 14; i++) {
+            let targetId = "target" + i;
+            myFunction(targetId);
+        }
+    }
+    
+    function handleCheckAll() {
+        var checkAllCheckbox = document.getElementById('checkAll');
+
+        // Add event listener to checkall checkbox
+        checkAllCheckbox.addEventListener('change', function () {
+            // Get all checkboxes that need to be checked/unchecked
+            var targetCheckboxes = document.querySelectorAll('[id^="checkbox"]');
+
+            // Loop through each checkbox and set its checked state
+            targetCheckboxes.forEach(function (checkbox) {
+                checkbox.checked = checkAllCheckbox.checked;
+            });
+
+            // Call createAndCallFunctions after setting checkboxes
+            createAndCallFunctions();
+        });
+    }
+
+    // Call handleCheckAll function to set up event listener
+    handleCheckAll();
+    function saveCheckboxState() {
+        var targetCheckboxes = document.querySelectorAll('[id^="checkbox"]');
+
+        targetCheckboxes.forEach(function (checkbox) {
+            localStorage.setItem(checkbox.id, checkbox.checked);
+        });
+    }
+
+    // Call saveCheckboxState when the page unloads or before navigating away
+    window.addEventListener('beforeunload', saveCheckboxState);
+    function loadCheckboxState() {
+        var targetCheckboxes = document.querySelectorAll('[id^="checkbox"]');
+
+        targetCheckboxes.forEach(function (checkbox) {
+            var isChecked = localStorage.getItem(checkbox.id);
+            if (isChecked === 'true') {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            var targetId = checkbox.id.substring(8); // 'checkbox' kısmını kes
+            myFunction('target' + targetId);
+        });
+    }
+
+    // Call loadCheckboxState when the page loads
+    document.addEventListener('DOMContentLoaded', loadCheckboxState);
+    
+
+</script>

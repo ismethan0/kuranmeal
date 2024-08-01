@@ -1,352 +1,54 @@
-﻿@{
+﻿@using Microsoft.EntityFrameworkCore
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Home Page";
 }
 <link href="~/css/style.css" rel="stylesheet">
 <div class="container-fluid p-1 bg-primary text-light text-center">
     <h2>Sûre Listesi</h2>
 </div>
+@{
+    KuranContext kuran = new KuranContext();
+    //var sureler = from sure in kuran.SureTables select sure;
+    var sureler = await (from sure in kuran.SureTables select sure).ToListAsync();
+    int b = 0;
+
+    //foreach (var i in sureler)
+    //{
+    //<p>@i.Sureler</p>
+    //}
+}
 <div class="container mt-5 mx-auto">
-    <div class="row">
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link my-1  d-flex align-items-center justify-content-between" href="">
+    @for (int i = 0; i < 38; i++)
+    {
+        <div class="row">
+            @for (int a = 0; a < 3; a++)
+            {
+                <div class="col-sm border mx-3 mt-3 rounded" id="myTable" name="aranan">
+                    <form asp-controller="Home" asp-action="Sure" method="post" style="display:inline;">
+                        <input type="hidden" name="sureNumarasi" value="@sureler[b].SureId" />
+                        <input type="hidden" name="ayetNumarasi" value="1" />
+                        <button class="nav-link my-1  d-flex align-items-center justify-content-between" type="submit">
+                            
+                            <h2 class="text-light text-start m-0">
+                                @sureler[b].Sureler.Split("/")[0]
+                            </h2>
+                            <p class="text-end mb-0 mt-3">@sureler[b].AyetSayisi Ayet</p>
+                        </button>
+                    </form>
+                </div>
+                b = b + 1;
 
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>Fatiha Suresi
-                </h2>
-                <p class="text-end mb-0 ">7 Ayet</p>
-            </a>
+            }
         </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>Bakara Suresi
-                </h2>
-                <p class="text-end mb-0 ">286 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-                <h2 class="text-light align-top m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-
-                    </svg>Âl-i İmrân Suresi
-                </h2>
-                <p class="text-end mb-0 ">200 Ayet</p>
-            </a>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link my-1  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>Nisâ Sûresi
-                </h2>
-                <p class="text-end mb-0 ">176 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>Mâide Sûresi
-                </h2>
-                <p class="text-end mb-0 ">112 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-                <h2 class="text-light align-top m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-
-                    </svg>En'âm Sûresi
-                </h2>
-                <p class="text-end mb-0 ">165 Ayet</p>
-            </a>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link my-1  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>A'râf Sûresi
-                </h2>
-                <p class="text-end mb-0 ">206 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>Enfâl Sûresi
-                </h2>
-                <p class="text-end mb-0 ">75 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-                <h2 class="text-light align-top m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-
-                    </svg>Tevbe Sûresi
-                </h2>
-                <p class="text-end mb-0 ">129 Ayet</p>
-            </a>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link my-1  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>A'râf Sûresi
-                </h2>
-                <p class="text-end mb-0 ">206 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>Enfâl Sûresi
-                </h2>
-                <p class="text-end mb-0 ">75 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-                <h2 class="text-light align-top m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-
-                    </svg>Tevbe Sûresi
-                </h2>
-                <p class="text-end mb-0 ">129 Ayet</p>
-            </a>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link my-1  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>A'râf Sûresi
-                </h2>
-                <p class="text-end mb-0 ">206 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>Enfâl Sûresi
-                </h2>
-                <p class="text-end mb-0 ">75 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-                <h2 class="text-light align-top m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-
-                    </svg>Tevbe Sûresi
-                </h2>
-                <p class="text-end mb-0 ">129 Ayet</p>
-            </a>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link my-1  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>A'râf Sûresi
-                </h2>
-                <p class="text-end mb-0 ">206 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>Enfâl Sûresi
-                </h2>
-                <p class="text-end mb-0 ">75 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-                <h2 class="text-light align-top m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-
-                    </svg>Tevbe Sûresi
-                </h2>
-                <p class="text-end mb-0 ">129 Ayet</p>
-            </a>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link my-1  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>A'râf Sûresi
-                </h2>
-                <p class="text-end mb-0 ">206 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>Enfâl Sûresi
-                </h2>
-                <p class="text-end mb-0 ">75 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-                <h2 class="text-light align-top m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-
-                    </svg>Tevbe Sûresi
-                </h2>
-                <p class="text-end mb-0 ">129 Ayet</p>
-            </a>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link my-1  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>A'râf Sûresi
-                </h2>
-                <p class="text-end mb-0 ">206 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>Enfâl Sûresi
-                </h2>
-                <p class="text-end mb-0 ">75 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-                <h2 class="text-light align-top m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-
-                    </svg>Tevbe Sûresi
-                </h2>
-                <p class="text-end mb-0 ">129 Ayet</p>
-            </a>
-        </div>
-    </div>
-    <div class="row mt-5 ">
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link my-1  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>A'râf Sûresi
-                </h2>
-                <p class="text-end mb-0 ">206 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-
-                <h2 class="text-light text-start m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-                    </svg>Enfâl Sûresi
-                </h2>
-                <p class="text-end mb-0 ">75 Ayet</p>
-            </a>
-        </div>
-        <div class="col-sm border me-3 rounded">
-            <a class="nav-link  d-flex align-items-center justify-content-between" href="">
-                <h2 class="text-light align-top m-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-1-square me-2 mb-1" viewBox="0 0 16 16">
-                        <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
-
-                    </svg>Tevbe Sûresi
-                </h2>
-                <p class="text-end mb-0 ">129 Ayet</p>
-            </a>
-        </div>
-    </div>
-
+    }
 </div>
+
+<script>
+   
+</script>

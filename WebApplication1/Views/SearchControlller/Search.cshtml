@@ -1,0 +1,20 @@
+﻿@using Microsoft.EntityFrameworkCore
+@model IEnumerable<dynamic>
+@{
+KuranContext kuran = new KuranContext();
+var sureler = await (from sure in kuran.SureTables select sure).ToListAsync();
+}
+<div class="container">
+    <h1 class="text-center text-light mt-5">Arama Sonuçları</h1>
+    <ul class="list-group mt-5">
+        @foreach (var ayet in Model)
+        {
+            <li class="list-group-item my-2">
+
+                <strong>@sureler[ayet.SureId - 1].Sureler.Split("/")[0] (@ayet.SureId) @ayet.AyetId Ayet</strong>
+                @ayet.Ayet inci
+                
+            </li>
+        }
+    </ul>
+</div>

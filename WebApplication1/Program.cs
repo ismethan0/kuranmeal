@@ -1,7 +1,10 @@
-var builder = WebApplication.CreateBuilder(args);
+global using kuranmealuygulamasý.Models;
+using WebApplication1.Controllers;
 
+var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<KuranContext>();
 
 var app = builder.Build();
 
@@ -20,8 +23,10 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
 app.Run();
